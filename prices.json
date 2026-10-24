@@ -1,0 +1,45 @@
+{
+  "_info": "ПРИМЕРНЫЙ прайс. Цены — ЗАГЛУШКИ, замените актуальными ценами поставщиков (сум). Обновляйте этот файл раз в месяц; бот подхватит изменения после перезапуска или команды /reload_prices.",
+  "currency": "UZS",
+  "updated": "2026-10-01",
+  "regions": {
+    "tashkent": 1.0,
+    "tashkent_region": 0.97,
+    "samarkand": 0.95,
+    "bukhara": 0.95,
+    "fergana": 0.93,
+    "andijan": 0.93,
+    "namangan": 0.93,
+    "khorezm": 0.95,
+    "kashkadarya": 0.94,
+    "surkhandarya": 0.95,
+    "jizzakh": 0.93,
+    "syrdarya": 0.93,
+    "navoi": 0.95,
+    "karakalpakstan": 0.97
+  },
+  "materials": {
+    "concrete_b20_m3":       {"name": "Бетон B20 (М250), м³",            "unit": "м3",  "price": 0},
+    "concrete_b25_m3":       {"name": "Бетон B25 (М350), м³",            "unit": "м3",  "price": 0},
+    "rebar_a500_t":          {"name": "Арматура А500С, т",               "unit": "т",   "price": 0},
+    "brick_single_pcs":      {"name": "Кирпич жжёный одинарный, шт",     "unit": "шт",  "price": 0},
+    "gas_block_m3":          {"name": "Газоблок D500, м³",               "unit": "м3",  "price": 0},
+    "cement_m400_bag50":     {"name": "Цемент М400, мешок 50 кг",        "unit": "меш", "price": 0},
+    "sand_m3":               {"name": "Песок, м³",                       "unit": "м3",  "price": 0},
+    "gravel_m3":             {"name": "Щебень 5-20, м³",                 "unit": "м3",  "price": 0},
+    "mineral_wool_m3":       {"name": "Минвата фасадная, м³",            "unit": "м3",  "price": 0},
+    "eps_m3":                {"name": "Пенополистирол (ППС), м³",        "unit": "м3",  "price": 0},
+    "metal_tile_m2":         {"name": "Металлочерепица, м²",             "unit": "м2",  "price": 0},
+    "timber_m3":             {"name": "Пиломатериал (стропила), м³",     "unit": "м3",  "price": 0}
+  },
+  "works": {
+    "foundation_m3":         {"name": "Устройство фундамента, м³",       "unit": "м3",  "price": 0},
+    "slab_m3":               {"name": "Монолитное перекрытие, м³",       "unit": "м3",  "price": 0},
+    "brick_masonry_m3":      {"name": "Кирпичная кладка, м³",            "unit": "м3",  "price": 0},
+    "block_masonry_m3":      {"name": "Кладка газоблока, м³",            "unit": "м3",  "price": 0},
+    "roof_m2":               {"name": "Монтаж кровли, м²",               "unit": "м2",  "price": 0},
+    "plaster_m2":            {"name": "Штукатурка стен, м²",             "unit": "м2",  "price": 0},
+    "screed_m2":             {"name": "Стяжка пола, м²",                 "unit": "м2",  "price": 0},
+    "facade_insulation_m2":  {"name": "Утепление фасада, м²",            "unit": "м2",  "price": 0}
+  }
+}
