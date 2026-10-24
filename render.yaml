@@ -1,0 +1,25 @@
+# Автонастройка для Render: New -> Blueprint -> выбрать этот репозиторий
+services:
+  - type: worker
+    name: archbot
+    runtime: docker
+    autoDeployTrigger: commit
+    disk:
+      name: archbot-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /data
+      - key: DAILY_LIMIT
+        value: "100"
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ADMIN_IDS
+        sync: false
+      - key: COMPANY_NAME
+        sync: false
+      - key: ALLOWED_USERS
+        sync: false
