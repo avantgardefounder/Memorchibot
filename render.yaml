@@ -1,9 +1,8 @@
-# Автонастройка для Render: New -> Blueprint -> выбрать этот репозиторий
 services:
   - type: worker
     name: archbot
     runtime: docker
-    autoDeployTrigger: commit
+    dockerfilePath: ./Dockerfile
     disk:
       name: archbot-data
       mountPath: /data
