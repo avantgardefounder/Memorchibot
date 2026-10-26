@@ -19,8 +19,63 @@ CREATE TABLE IF NOT EXISTS history(
 CREATE TABLE IF NOT EXISTS usage(
   id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, model TEXT,
   input_tokens INTEGER, output_tokens INTEGER, ts REAL);
+CREATE TABLE IF NOT EXISTS objects(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, client TEXT, address TEXT,
+  budget REAL DEFAULT 0, fee_percent REAL DEFAULT 0, currency TEXT DEFAULT 'UZS',
+  status TEXT DEFAULT 'active', created REAL);
+CREATE TABLE IF NOT EXISTS transactions(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, object_id INTEGER, date TEXT, type TEXT,
+  category TEXT, description TEXT, qty REAL, unit TEXT, price REAL, amount REAL,
+  author_id INTEGER, author_name TEXT, created REAL, deleted INTEGER DEFAULT 0);
+CREATE TABLE IF NOT EXISTS participants(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, object_id INTEGER, user_id INTEGER, role TEXT,
+  label TEXT, added_by INTEGER, created REAL, active INTEGER DEFAULT 1,
+  UNIQUE(object_id, user_id, role));
+CREATE TABLE IF NOT EXISTS invites(
+  code TEXT PRIMARY KEY, object_id INTEGER, role TEXT, label TEXT, created_by INTEGER,
+  created REAL, active INTEGER DEFAULT 1);
+CREATE TABLE IF NOT EXISTS attendance(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, object_id INTEGER, user_id INTEGER, date TEXT,
+  in_ts REAL, in_lat REAL, in_lon REAL, in_dist REAL, in_selfie TEXT,
+  out_ts REAL, out_lat REAL, out_lon REAL, out_dist REAL, work_text TEXT, flags TEXT DEFAULT '');
+CREATE TABLE IF NOT EXISTS photos(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, object_id INTEGER, user_id INTEGER, date TEXT, ts REAL,
+  file_id TEXT, kind TEXT, caption TEXT, ref_id INTEGER);
+CREATE TABLE IF NOT EXISTS audit(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL, user_id INTEGER, user_name TEXT,
+  object_id INTEGER, action TEXT, details TEXT);
+CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT);
 """)
+_MIGRATIONS = {  # новые колонки для баз, созданных старыми версиями
+    "transactions": ("orig_currency TEXT", "orig_amount REAL", "rate REAL", "paid_by TEXT", "receipt_file_id TEXT"),
+    "objects": ("obj_type TEXT", "area REAL", "floors INTEGER", "lat REAL", "lon REAL", "radius REAL",
+                "start_date TEXT", "end_date TEXT", "group_chat_id INTEGER"),
+}
+for _table, _cols in _MIGRATIONS.items():
+    for _col in _cols:
+        try:
+            _con.execute(f"ALTER TABLE {_table} ADD COLUMN {_col}")
+        except sqlite3.OperationalError:
+            pass
 _con.commit()
+
+
+def get_setting(key, default=None):
+    r = _con.execute("SELECT value FROM settings WHERE key=?", (key,)).fetchone()
+    return r[0] if r else default
+
+
+def set_setting(key, value):
+    _con.execute("INSERT INTO settings(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                 (key, str(value)))
+    _con.commit()
+
+
+def audit(user_id, user_name, object_id, action, details=""):
+    """Журнал изменений: кто, когда, что сделал (ТЗ, раздел 7)."""
+    _con.execute("INSERT INTO audit(ts,user_id,user_name,object_id,action,details) VALUES(?,?,?,?,?,?)",
+                 (time.time(), user_id, user_name, object_id, action, details[:2000]))
+    _con.commit()
 
 HISTORY_LIMIT = 12  # последних сообщений в контексте (экономит токены)
 
